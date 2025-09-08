@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Regex LaTeX Processor</title>
+	<link rel="stylesheet" href="style.css" />
+	<link rel="icon" href="favicon.png" type="image/png" />
+</head>
+
+<body>
+	<div id="top-bar">
+		<label for="regex-input">Regex:</label>
+		<input type="text" id="regex-input" />
+		<button id="default-regex">Default</button>
+		<span id="regex-error" class="hidden">Invalid regex</span>
+	</div>
+	<div id="main">
+		<div class="pane" id="input">
+			<div id="latex-input" contenteditable="true" spellcheck="false"></div>
+		</div>
+		<div class="pane" id="result">
+			<button id="copy-button">📋</button>
+			<div id="output-text" contenteditable="false"></div>
+		</div>
+
+	</div>
+
+	<script src="dist/script.js"></script>
+</body>
+
+</html>

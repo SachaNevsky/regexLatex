@@ -1,0 +1,121 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: sans-serif;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+#top-bar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: #f0f0f0;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+
+#regex-input {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+}
+
+#regex-input.invalid {
+    border-color: red;
+    background-color: #ffe6e6;
+}
+
+#regex-error {
+    color: red;
+}
+
+.hidden {
+    display: none;
+}
+
+
+#main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    height: 100%;
+}
+
+
+.pane {
+    flex: 1;
+    padding: 10px;
+    position: relative;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+#latex-input {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    font-family: monospace;
+    background-color: inherit;
+    border: none;
+    resize: none;
+    outline: none;
+    white-space: pre-wrap;
+}
+
+
+#output-text {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    flex: 1;
+    font-family: monospace;
+    overflow-y: auto;
+    margin: 0 1px 0 1px;
+    padding: 10px;
+}
+
+#copy-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px;
+    cursor: pointer;
+    background-color: transparent;
+}
+
+.command {
+    color: #0000ff;
+}
+
+.arg {
+    color: #4b94aa;
+}
+
+.comment {
+    color: #6f9f88;
+}
+
+.math {
+    color: #036a07;
+}
+
+.math-command {
+    color: #833fba;
+}
+
+.escape {
+    color: #833fba;
+}
