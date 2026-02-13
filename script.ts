@@ -6,12 +6,13 @@ const regexError = document.getElementById("regex-error") as HTMLSpanElement;
 
 let currentRegex: RegExp | null = null;
 
-function validateRegex() {
+function validateRegex(): void {
     try {
         currentRegex = new RegExp(regexInput.value, "gu");
         regexInput.classList.remove("invalid");
         regexError.classList.add("hidden");
     } catch (e) {
+        console.error("Error", e);
         currentRegex = null;
         regexInput.classList.add("invalid");
         regexError.classList.remove("hidden");
@@ -19,33 +20,27 @@ function validateRegex() {
 }
 
 function highlightLatex(text: string): string {
-    // Escape HTML
     text = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-    // Comments (unescaped %)
     text = text.replace(/(^|[^\\])(%.*)/g, (_, pre, comment) =>
         `${pre}<span class="comment">${comment}</span>`
     );
 
-    // Escaped characters
     text = text.replace(/\\[%_{}$&#]/g, (m) =>
         `<span class="escape">${m}</span>`
     );
 
-    // Specific commands
     text = text.replace(/\\(textwidth|midrule)\b/g, (m) =>
         `<span class="command">${m}</span>`
     );
 
-    // Math mode
-    text = text.replace(/\$(.+?)\$/g, (match, content) => {
+    text = text.replace(/\$(.+?)\$/g, (_, content) => {
         const highlighted = content.replace(/\\[a-zA-Z]+/g, (cmd: string) =>
             `<span class="math-command">${cmd}</span>`
         );
         return `<span class="math">$</span><span class="math">${highlighted}</span><span class="math">$</span>`;
     });
 
-    // General LaTeX commands with optional args
     text = text.replace(/\\[a-zA-Z]+(\[[^\]]*\])?(\{[^}]*\})?/g, (match) => {
         return match
             .replace(/(\\[a-zA-Z]+)/, `<span class="command">$1</span>`)
@@ -53,34 +48,32 @@ function highlightLatex(text: string): string {
             .replace(/\{([^}]*)\}/, `<span class="arg">{$1}</span>`);
     });
 
-    // Special commands with colored args
     text = text.replace(/\\(begin|end|cite|citet|url|label)\{([^}]*)\}/g, (match: string, cmd: string, arg: string) =>
         `<span class="command">\\${cmd}</span><span class="arg">{${arg}}</span>`
     );
 
-
     return text;
 }
 
-
-function adjustCopyButtonPosition() {
-    const output = outputText;
-    const copyBtn = copyButton;
-
-    const hasScroll = output.scrollHeight > output.clientHeight;
+function adjustCopyButtonPosition(): void {
+    const output: HTMLPreElement = outputText;
+    const copyBtn: HTMLButtonElement = copyButton;
+    const hasScroll: boolean = output.scrollHeight > output.clientHeight;
 
     copyBtn.style.right = hasScroll ? "35px" : "10px";
 }
 
-function processText() {
-    const raw = latexInput.innerText;
+function processText(): void {
+    const raw: string = latexInput.innerText;
+    let processed: string = raw;
 
-    let processed = raw;
     if (currentRegex) {
-        processed = processed.replace(currentRegex, (_, prefix) => prefix || "");
+        processed = processed.replace(currentRegex, (_, prefix) => {
+            return prefix === '\n' ? '' : (prefix || '');
+        });
     }
-    processed = processed.replace(/\n{3,}/g, "\n\n");
 
+    processed = processed.replace(/\n{3,}/g, "\n\n");
     outputText.innerHTML = highlightLatex(processed);
 }
 
@@ -98,9 +91,8 @@ copyButton.addEventListener("click", () => {
     });
 });
 
-
-const defaultRegex = "(^|[^\\\\])%.*";
-const defaultButton = document.getElementById("default-regex") as HTMLButtonElement;
+const defaultRegex: string = "(^|[^\\\\])%.*";
+const defaultButton: HTMLButtonElement = document.getElementById("default-regex") as HTMLButtonElement;
 
 defaultButton.addEventListener("click", () => {
     regexInput.value = defaultRegex;
@@ -108,9 +100,6 @@ defaultButton.addEventListener("click", () => {
     processText();
 });
 
-
-// Initialize on load
 regexInput.value = defaultRegex;
 validateRegex();
 processText();
-

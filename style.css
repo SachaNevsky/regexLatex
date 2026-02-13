@@ -119,3 +119,7 @@ body {
 .escape {
     color: #833fba;
 }
+
+code {
+    color: black;
+}
